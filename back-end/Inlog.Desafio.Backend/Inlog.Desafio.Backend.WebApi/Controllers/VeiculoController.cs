@@ -1,32 +1,31 @@
+using Inlog.Desafio.Backend.Application.Contracts;
+using Inlog.Desafio.Backend.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inlog.Desafio.Backend.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class VeiculoController : ControllerBase
 {
-    private readonly ILogger<VeiculoController> _logger;
+    private readonly IVeiculoService _service;
 
-    public VeiculoController(ILogger<VeiculoController> logger)
+    public VeiculoController(IVeiculoService service)
     {
-        _logger = logger;
+        _service = service;
     }
 
     [HttpPost("Cadastrar")]
-    public async Task<IActionResult> Cadastrar([FromBody] object dadosDoVeiculo)
+    public async Task<IActionResult> Cadastrar([FromBody] VeiculoRequest request, CancellationToken ct)
     {
-        // TODO: Cadastrar um veiculo em memoria ou banco de dados
-
-        return Ok();
+        await _service.CadastrarAsync(request, ct);
+        return Ok("Veículo cadastrado com sucesso!");
     }
 
     [HttpGet("Listar")]
-    public async Task<IActionResult> ListarVeiculosAsync()
+    public async Task<IActionResult> Listar(CancellationToken ct)
     {
-        // TODO: retornar todos veiculos 
-
-        return Ok();
+        var veiculos = await _service.ListarAsync(ct);
+        return Ok(veiculos);
     }
 }
-

@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="2.9.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Inlog.Desafio.Backend.Application\Inlog.Desafio.Backend.Application.csproj" />
+    <ProjectReference Include="..\Inlog.Desafio.Backend.Domain\Inlog.Desafio.Backend.Domain.csproj" />
+    <ProjectReference Include="..\Inlog.Desafio.Backend.Infra.Database\Inlog.Desafio.Backend.Infra.Database.csproj" />
+    <ProjectReference Include="..\Inlog.Desafio.Backend.WebApi\Inlog.Desafio.Backend.WebApi.csproj" />
+  </ItemGroup>
+
 </Project>

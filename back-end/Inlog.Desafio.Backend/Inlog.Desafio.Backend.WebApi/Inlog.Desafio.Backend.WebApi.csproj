@@ -10,4 +10,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Inlog.Desafio.Backend.Application\Inlog.Desafio.Backend.Application.csproj" />
+    <ProjectReference Include="..\Inlog.Desafio.Backend.Infra.Database\Inlog.Desafio.Backend.Infra.Database.csproj" />
+  </ItemGroup>
+
 </Project>
