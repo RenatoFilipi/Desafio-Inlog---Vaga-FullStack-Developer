@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import type { Coordinates, Vehicle } from "@/lib/interfaces";
-import { haversineDistance, type appState } from "@/lib/utils";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+import type { Coordinates, Vehicle } from "../lib/interfaces";
+import { haversineDistance, type appState } from "../lib/utils";
 import {
   BusIcon,
   CarIcon,
@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import ModeToggle from "@/components/mode-toggle";
+import ModeToggle from "../components/mode-toggle";
 
 type tabType = "vehicle-list" | "map";
 
