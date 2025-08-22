@@ -2,16 +2,26 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { Coordinates, Vehicle } from "@/lib/interfaces";
 import { haversineDistance, type appState } from "@/lib/utils";
-import { CarIcon, Loader2Icon, MapPinIcon, PlusIcon, XCircleIcon } from "lucide-react";
+import {
+  BusIcon,
+  CarIcon,
+  Loader2Icon,
+  MapIcon,
+  MapPinIcon,
+  PlusIcon,
+  TruckIcon,
+  XCircleIcon,
+  type LucideIcon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 type tabType = "vehicle-list" | "map";
 
-const tabs: { label: string; type: tabType }[] = [
-  { label: "Lista de veículos", type: "vehicle-list" },
-  { label: "Mapa", type: "map" },
+const tabs: { label: string; type: tabType; icon: LucideIcon }[] = [
+  { label: "Lista de veículos", type: "vehicle-list", icon: CarIcon },
+  { label: "Mapa", type: "map", icon: MapIcon },
 ];
 
 const Home = () => {
@@ -61,9 +71,11 @@ const Home = () => {
               <h1 className="font-bold text-xl">Carros cadastrados</h1>
               <p className="text-sm text-muted-foreground">Listagem dos carros cadastrados na nossa base de dados</p>
             </div>
-            <Button className="w-full sm:w-fit">
-              <PlusIcon />
-              Cadastrar Novo Carro
+            <Button className="w-full sm:w-fit" asChild>
+              <a href="/new-car">
+                <PlusIcon />
+                Cadastrar Novo Carro
+              </a>
             </Button>
           </div>
           <div className="flex border-b w-full">
@@ -73,10 +85,11 @@ const Home = () => {
                 <button
                   onClick={() => setCurrentTab(tab.type)}
                   key={tab.type}
-                  className={`${
-                    isCurrentTab ? "text-primary" : "text-foreground/70 hover:text-foreground"
-                  } relative px-4 py-2 text-sm font-medium cursor-pointer`}>
-                  {tab.label}
+                  className={`relative px-4 py-2 text-sm font-medium cursor-pointer flex justify-center items-center gap-2`}>
+                  <tab.icon className={`${isCurrentTab ? "text-primary" : "text-muted-foreground/80"} w-5 h-5`} />
+                  <span className={`${isCurrentTab ? "text-foreground" : "text-muted-foreground/80"}`}>
+                    {tab.label}
+                  </span>
                   {isCurrentTab && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-t" />}
                 </button>
               );
@@ -87,21 +100,24 @@ const Home = () => {
           <div className="w-full">
             {appState === "error" && (
               <div className="flex justify-center items-center w-full h-72 flex-col gap-2">
-                <XCircleIcon className="text-foreground w-8 h-8" />
-                <span className="text-sm text-muted-foreground">Erro na busca dos carros cadastrados</span>
+                <XCircleIcon className="text-destructive w-8 h-8" />
+                <span className="text-sm font-medium text-destructive">Não foi possível carregar os veículos.</span>
+                <span className="text-xs text-muted-foreground">Verifique sua conexão e tente novamente.</span>
               </div>
             )}
             {appState === "loading" && (
               <div className="flex justify-center items-center w-full h-72 flex-col gap-2">
                 <Loader2Icon className="text-primary w-8 h-8 animate-spin" />
-                <span className="text-sm text-muted-foreground">Buscando os carros cadastrados...</span>
+                <span className="text-sm font-medium">Carregando veículos...</span>
+                <span className="text-xs text-muted-foreground">Aguarde um instante enquanto buscamos os dados.</span>
               </div>
             )}
             {appState === "idle" && vehicles.length <= 0 && (
               <Card className="flex justify-center items-center w-full h-72 flex-col bg-foreground/5 p-5 gap-4">
                 <CarIcon className="text-primary w-8 h-8" />
-                <p className="text-sm text-muted-foreground text-center">
-                  Nenhum carro cadastrado na base de dados, cadastre para ver na lista.
+                <p className="text-sm font-medium text-center">Nenhum veículo cadastrado.</p>
+                <p className="text-xs text-muted-foreground text-center">
+                  Cadastre um novo veículo para vê-lo listado aqui.
                 </p>
               </Card>
             )}
@@ -152,8 +168,9 @@ const VehicleCard = ({ vehicle }: { vehicle: Vehicle }) => {
   return (
     <Card className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 p-5 hover:shadow transition-shadow duration-300">
       <div className="flex items-center gap-4">
-        <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center">
-          <CarIcon className="w-7 h-7 text-primary" />
+        <div className="w-12 h-12 bg-primary/10 rounded flex items-center justify-center">
+          {tipoVeiculoLabel === "Ônibus" && <BusIcon className="w-7 h-7 text-primary" />}
+          {tipoVeiculoLabel === "Caminhão" && <TruckIcon className="w-7 h-7 text-primary" />}
         </div>
         <div className="flex flex-col">
           <span className="font-bold text-lg">{vehicle.identificador}</span>
@@ -163,13 +180,13 @@ const VehicleCard = ({ vehicle }: { vehicle: Vehicle }) => {
       <div className="flex flex-col gap-2 text-sm sm:text-base text-muted-foreground">
         <div className="flex flex-wrap gap-4">
           <div>
-            <span className="font-medium">Placa:</span> {vehicle.placa}
+            <span className="font-semibold">Placa:</span> {vehicle.placa}
           </div>
           <div>
-            <span className="font-medium">Chassi:</span> {vehicle.chassi}
+            <span className="font-semibold">Chassi:</span> {vehicle.chassi}
           </div>
           <div>
-            <span className="font-medium">Cor:</span> {vehicle.cor}
+            <span className="font-semibold">Cor:</span> {vehicle.cor}
           </div>
         </div>
         <div className="flex items-center gap-1 text-muted-foreground/70 mt-1">
