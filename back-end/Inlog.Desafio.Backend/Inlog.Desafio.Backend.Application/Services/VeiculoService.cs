@@ -27,7 +27,12 @@ namespace Inlog.Desafio.Backend.Application.Services
             {
                 Chassi = request.Chassi.Trim().ToUpperInvariant(),
                 TipoVeiculo = request.TipoVeiculo,
-                Cor = request.Cor.Trim()
+                Cor = request.Cor.Trim(),
+                Identificador = request.Identificador,
+                Placa = request.Placa,
+                SerieRastreador = request.SerieRastreador,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude
             };
 
             await _repo.AdicionarAsync(veiculo, ct);
@@ -41,7 +46,12 @@ namespace Inlog.Desafio.Backend.Application.Services
             {
                 Chassi = v.Chassi,
                 TipoVeiculo = v.TipoVeiculo,
-                Cor = v.Cor
+                Cor = v.Cor,
+                Identificador = v.Identificador,
+                Placa = v.Placa,
+                SerieRastreador = v.SerieRastreador,
+                Latitude = v.Latitude,
+                Longitude = v.Longitude
             }).ToList();
         }
     }
