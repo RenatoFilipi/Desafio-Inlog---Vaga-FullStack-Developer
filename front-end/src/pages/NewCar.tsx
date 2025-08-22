@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useForm } from "react-hook-form";
 import { Card } from "@/components/ui/card";
 import type { Vehicle, VehicleType } from "@/lib/interfaces";
+import ModeToggle from "@/components/mode-toggle";
 
 const NewCar = () => {
   const [appState, setAppState] = useState<appState>("idle");
@@ -100,20 +101,23 @@ const NewCar = () => {
   return (
     <div className="flex flex-col justify-start items-center w-full min-h-dvh py-10 gap-10">
       <div className="flex flex-col w-full gap-12 sm:max-w-7xl px-4 sm:px-0 h-full flex-1">
-        <div className="flex flex-col gap-4">
-          <div className="w-full flex justify-between items-center gap-3 flex-col sm:flex-row">
-            <div className="flex flex-col gap-1 w-full sm:w-fit">
-              <h1 className="font-bold text-xl">Carros cadastrados</h1>
+        <div className="flex flex-col gap-4 w-full">
+          <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div className="flex flex-col gap-1 w-full sm:w-auto text-center sm:text-left">
+              <h1 className="text-xl font-bold">Carros cadastrados</h1>
               <p className="text-sm text-muted-foreground">Listagem dos carros cadastrados na nossa base de dados</p>
             </div>
-            <Button
-              variant="outline"
-              className="w-full sm:w-fit"
-              disabled={appState === "loading"}
-              onClick={() => (window.location.href = "/")}>
-              <ChevronLeftIcon />
-              Voltar
-            </Button>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+              <ModeToggle />
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto"
+                disabled={appState === "loading"}
+                onClick={() => (window.location.href = "/")}>
+                <ChevronLeftIcon />
+                Voltar
+              </Button>
+            </div>
           </div>
         </div>
         <Form {...form}>

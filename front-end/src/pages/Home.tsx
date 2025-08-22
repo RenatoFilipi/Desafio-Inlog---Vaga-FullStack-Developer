@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import ModeToggle from "@/components/mode-toggle";
 
 type tabType = "vehicle-list" | "map";
 
@@ -66,17 +67,20 @@ const Home = () => {
     <div className="flex flex-col justify-start items-center w-full min-h-dvh py-10 gap-10">
       <div className="flex flex-col w-full gap-12 sm:max-w-7xl px-4 sm:px-0 h-full flex-1">
         <div className="flex flex-col gap-4">
-          <div className="w-full flex justify-between items-center gap-3 flex-col sm:flex-row">
-            <div className="flex flex-col gap-1 w-full sm:w-fit">
-              <h1 className="font-bold text-xl">Carros cadastrados</h1>
+          <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div className="flex flex-col gap-1 w-full sm:w-auto text-center sm:text-left">
+              <h1 className="text-xl font-bold">Carros cadastrados</h1>
               <p className="text-sm text-muted-foreground">Listagem dos carros cadastrados na nossa base de dados</p>
             </div>
-            <Button className="w-full sm:w-fit" asChild>
-              <a href="/new-car">
-                <PlusIcon />
-                Cadastrar Novo Carro
-              </a>
-            </Button>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+              <ModeToggle />
+              <Button className="w-full sm:w-auto" asChild>
+                <a href="/new-car" className="flex items-center justify-center gap-1">
+                  <PlusIcon />
+                  Cadastrar Novo Carro
+                </a>
+              </Button>
+            </div>
           </div>
           <div className="flex border-b w-full">
             {tabs.map((tab) => {
@@ -168,7 +172,7 @@ const VehicleCard = ({ vehicle }: { vehicle: Vehicle }) => {
   return (
     <Card className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 p-5 hover:shadow transition-shadow duration-300">
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-primary/10 rounded flex items-center justify-center">
+        <div className="w-12 h-12 bg-foreground/5 rounded flex items-center justify-center">
           {tipoVeiculoLabel === "Ônibus" && <BusIcon className="w-7 h-7 text-primary" />}
           {tipoVeiculoLabel === "Caminhão" && <TruckIcon className="w-7 h-7 text-primary" />}
         </div>
