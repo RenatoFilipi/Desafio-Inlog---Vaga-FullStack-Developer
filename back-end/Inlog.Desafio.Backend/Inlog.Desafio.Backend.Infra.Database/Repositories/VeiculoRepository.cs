@@ -14,6 +14,10 @@ namespace Inlog.Desafio.Backend.Infra.Database.Repositories
 
         public Task AdicionarAsync(Veiculo veiculo, CancellationToken ct = default)
         {
+            if (_db.Any(v => v.Chassi.Equals(veiculo.Chassi, StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new InvalidOperationException($"Veículo com chassi '{veiculo.Chassi}' já cadastrado.");
+            }
             _db.Add(veiculo);
             return Task.CompletedTask;
         }

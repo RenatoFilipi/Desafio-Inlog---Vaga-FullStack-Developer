@@ -18,14 +18,28 @@ public class VeiculoController : ControllerBase
     [HttpPost("Cadastrar")]
     public async Task<IActionResult> Cadastrar([FromBody] VeiculoRequest request, CancellationToken ct)
     {
-        await _service.CadastrarAsync(request, ct);
-        return Ok("Veículo cadastrado com sucesso!");
+        try
+        {
+            await _service.CadastrarAsync(request, ct);
+            return Ok("Veículo cadastrado com sucesso!");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { mensagem = ex.Message });
+        }
     }
 
     [HttpGet("Listar")]
     public async Task<IActionResult> Listar(CancellationToken ct)
     {
-        var veiculos = await _service.ListarAsync(ct);
-        return Ok(veiculos);
+        try
+        {
+            var veiculos = await _service.ListarAsync(ct);
+            return Ok(veiculos);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { mensagem = ex.Message });
+        }
     }
 }
