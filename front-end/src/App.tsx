@@ -1,11 +1,14 @@
-import { Button } from "./components/ui/button";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import NewCar from "./pages/NewCar";
 
-const App = () => {
+export default function App() {
   return (
-    <div className="flex justify-center items-center w-full h-dvh">
-      <Button>Click me</Button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/new-car" element={<NewCar />} />
+      </Routes>
+    </BrowserRouter>
   );
-};
-
-export default App;
+}
