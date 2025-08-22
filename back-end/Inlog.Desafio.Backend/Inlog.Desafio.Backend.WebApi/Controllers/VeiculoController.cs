@@ -42,4 +42,10 @@ public class VeiculoController : ControllerBase
             return BadRequest(new { mensagem = ex.Message });
         }
     }
+
+    [HttpGet("Health")]
+    public IActionResult Health()
+    {
+        return Ok("API Veículo está online!");
+    }
 }
