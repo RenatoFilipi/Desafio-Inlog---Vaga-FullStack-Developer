@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import type { Vehicle } from "@/lib/interfaces";
+import type { Coordinates, Vehicle } from "@/lib/interfaces";
 import { haversineDistance, type appState } from "@/lib/utils";
-import { BirdIcon, CarIcon, Loader2Icon, MapPinIcon, PlusIcon, XCircleIcon } from "lucide-react";
+import { CarIcon, Loader2Icon, MapPinIcon, PlusIcon, XCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 type tabType = "vehicle-list" | "map";
 
@@ -16,6 +18,7 @@ const Home = () => {
   const [appState, setAppState] = useState<appState>("loading");
   const [vehicles, setVehicles] = useState<(Vehicle & { distance?: number })[]>([]);
   const [currentTab, setCurrentTab] = useState<tabType>("vehicle-list");
+  const [userCoodinates, setUserCoodinates] = useState<Coordinates>({ latitude: 0, longitude: 0 });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +27,7 @@ const Home = () => {
         navigator.geolocation.getCurrentPosition(async (position) => {
           const userLat = position.coords.latitude;
           const userLon = position.coords.longitude;
+          setUserCoodinates({ latitude: userLat, longitude: userLon });
           const response = await fetch("https://localhost:7222/api/Veiculo/Listar");
           if (!response.ok) throw new Error("");
 
@@ -50,7 +54,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col justify-start items-center w-full min-h-dvh py-10 gap-10">
-      <div className="flex flex-col w-full gap-12 sm:max-w-7xl px-4 sm:px-0">
+      <div className="flex flex-col w-full gap-12 sm:max-w-7xl px-4 sm:px-0 h-full flex-1">
         <div className="flex flex-col gap-4">
           <div className="w-full flex justify-between items-center gap-3 flex-col sm:flex-row">
             <div className="flex flex-col gap-1 w-full sm:w-fit">
@@ -111,9 +115,30 @@ const Home = () => {
           </div>
         )}
         {currentTab === "map" && (
-          <Card className="flex justify-center items-center w-full h-72 flex-col gap-3">
-            <BirdIcon className="text-primary" />
-            <span>Trabalho em progresso.</span>
+          <Card className="w-full h-[600px] p-0 overflow-hidden">
+            <MapContainer
+              center={[userCoodinates.latitude, userCoodinates.longitude]}
+              zoom={14}
+              className="w-full h-full">
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[userCoodinates.latitude, userCoodinates.longitude]}>
+                <Popup>📍 Você está aqui</Popup>
+              </Marker>
+              {vehicles.map((v) => (
+                <Marker key={v.chassi} position={[v.latitude, v.longitude]}>
+                  <Popup>
+                    <strong>{v.identificador}</strong>
+                    <br />
+                    Placa: {v.placa}
+                    <br />
+                    Cor: {v.cor}
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
           </Card>
         )}
       </div>

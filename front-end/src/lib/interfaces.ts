@@ -10,3 +10,8 @@ export interface Vehicle {
   latitude: number;
   longitude: number;
 }
+
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
